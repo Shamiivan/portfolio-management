@@ -10,13 +10,13 @@ def keep_awake(iterable):
         yield item
         time.sleep(0.1) 
 
-def get_logger(name):
+def get_logger(path):
     #TODO : ERASE FILE BEFORE
     # Set up logging
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         handlers=[
-                            logging.FileHandler("../logs/" + name),
+                            logging.FileHandler(path),
                             logging.StreamHandler()
                         ])
     return logging.getLogger(__name__)

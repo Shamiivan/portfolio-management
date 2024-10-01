@@ -26,20 +26,15 @@ if __name__ == "__main__":
     work_dir = "home/galileo/workspace/portfolio-management"
 
     file_path = "../dataset/data.csv"
-    raw = pd.read_csv(
-        file_path, parse_dates=["date"], low_memory=False
-    )  # the date is the first day of the return month (t+1)
+    raw = pd.read_csv(file_path, parse_dates=["date"], low_memory=False) # the date is the first day of the return month (t+1)
 
     # read list of predictors for stocks
-    file_path = "../dataset/factors.csv"
-
+    file_path = "../dataset/factor_char_list.csv"
     stock_vars = list(pd.read_csv(file_path)["variable"].values)
 
     # define the left hand side variable
     ret_var = "stock_exret"
-    new_set = raw[
-        raw[ret_var].notna()
-    ].copy()  # create a copy of the data and make sure the left hand side is not missing
+    new_set = raw[raw[ret_var].notna()].copy()  # create a copy of the data and make sure the left hand side is not missing
 
     # transform each variable in each month to the same scale
     monthly = new_set.groupby("date")
@@ -62,9 +57,7 @@ if __name__ == "__main__":
                 print("Warning:", date, var, "set to zero.")
 
         # add the adjusted values
-        data = data._append(
-            group, ignore_index=True
-        )  # append may not work with certain versions of pandas, use concat instead if needed
+        data = data._append(group, ignore_index=True)  # append may not work with certain versions of pandas, use concat instead if needed
 
     # initialize the starting date, counter, and output data
     starting = pd.to_datetime("20000101", format="%Y%m%d")
@@ -77,10 +70,7 @@ if __name__ == "__main__":
     ):
         cutoff = [
             starting,
-            starting
-            + pd.DateOffset(
-                years=8 + counter
-            ),  # use 8 years and expanding as the training set
+            starting + pd.DateOffset( years=8 + counter), 
             starting
             + pd.DateOffset(
                 years=10 + counter
@@ -103,6 +93,7 @@ if __name__ == "__main__":
         # get Xs and Ys
         X_train = train[stock_vars].values
         Y_train = train[ret_var].values
+
         X_val = validate[stock_vars].values
         Y_val = validate[ret_var].values
         X_test = test[stock_vars].values
@@ -114,9 +105,9 @@ if __name__ == "__main__":
         Y_train_dm = Y_train - Y_mean
 
         # prepare output data
-        reg_pred = test[
+        reg_pred = test[ 
             ["year", "month", "date", "permno", ret_var]
-        ]  # minimum identifications for each stock
+            ]  # minimum identifications for each stock
 
         # Linear Regression
         # no validation is needed for OLS
@@ -175,7 +166,9 @@ if __name__ == "__main__":
         pred_out = pred_out._append(reg_pred, ignore_index=True)
 
         if (counter % 2 == 0):
-            logger.info(f"\nCurrent year {starting + pd.DateOffset(counter)}, \nDataset\n{reg_pred}")
+            logger.info(f"\nCurrent year {starting + pd.DateOffset(counter)}, \nDataset\n{cutoff}")
+            logger.info(f"Training dataset\n {counter} train :\n{train}\n x_values{X_train}\ny_values\n{X_train}")
+            logger.info(f"Predictions \n{reg_pred}")
         # go to the next year
         counter += 1
 
@@ -193,3 +186,7 @@ if __name__ == "__main__":
 
     # for timing purpose
     print(datetime.datetime.now())
+
+def print_object_details(obj):
+    log = get_logger("Obj details")
+    log.info(f"Type {type(obj)}")

@@ -74,8 +74,7 @@ def main():
         Y_val = validate[ret_var].values
         X_test = test[stock_vars].values
         Y_test = test[ret_var].values
-        agent = PPO()
-
+        train_window(train, stock_vars, ret_var)
         
         
 
@@ -184,7 +183,7 @@ def keep_awake(iterable):
         yield item
         time.sleep(0.1) 
 
-def train(train:np.array , stock_vars:list, ret_var):
+def train_window(train:np.array , stock_vars:list, ret_var):
     env = MarketEnv(train, stock_vars, ret_var)
     
     num_state = env.observation_space.shape[0]

@@ -2,10 +2,10 @@ import gym
 from gym import spaces
 import numpy as np
 
-class StockSelectionEnv(gym.Env):
+class MarketEnv(gym.Env):
 
     def __init__(self, data, stock_vars, ret_var):
-        super(StockSelectionEnv, self).__init__()
+        super(MarketEnv, self).__init__()
         self.data = data.reset_index(drop=True)
         self.stock_vars = stock_vars
         self.ret_var = ret_var

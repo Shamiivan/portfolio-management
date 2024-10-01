@@ -16,36 +16,36 @@ import torch.optim as optim
 from torch.distributions import Normal
 from torch.utils.data.sampler import BatchSampler, SubsetRandomSampler
 
-# Parameters
-parser = argparse.ArgumentParser(description='Solve the Pendulum-v0 with PPO')
-parser.add_argument(
-    '--gamma', type=float, default=0.9, metavar='G', help='discount factor (default: 0.9)')
-parser.add_argument('--seed', type=int, default=0, metavar='N', help='random seed (default: 0)')
-parser.add_argument('--render', action='store_true', default=True, help='render the environment')
-parser.add_argument(
-    '--log-interval',
-    type=int,
-    default=10,
-    metavar='N',
-    help='interval between training status logs (default: 10)')
-args = parser.parse_args()
+# # Parameters
+# parser = argparse.ArgumentParser(description='Solve the Pendulum-v0 with PPO')
+# parser.add_argument(
+#     '--gamma', type=float, default=0.9, metavar='G', help='discount factor (default: 0.9)')
+# parser.add_argument('--seed', type=int, default=0, metavar='N', help='random seed (default: 0)')
+# parser.add_argument('--render', action='store_true', default=True, help='render the environment')
+# parser.add_argument(
+#     '--log-interval',
+#     type=int,
+#     default=10,
+#     metavar='N',
+#     help='interval between training status logs (default: 10)')
+# args = parser.parse_args()
 
-env = gym.make('MarketEnv').unwrapped
-num_state = env.observation_space.shape[0]
-num_action = env.action_space.shape[0]
-torch.manual_seed(args.seed)
-env.seed(args.seed)
+# env = gym.make('MarketEnv').unwrapped
+# num_state = env.observation_space.shape[0]
+# num_action = env.action_space.shape[0]
+# torch.manual_seed(args.seed)
+# env.seed(args.seed)
 
-Transition = namedtuple('Transition',['state', 'action', 'reward', 'a_log_prob', 'next_state'])
-TrainRecord = namedtuple('TrainRecord',['episode', 'reward'])
+# Transition = namedtuple('Transition',['state', 'action', 'reward', 'a_log_prob', 'next_state'])
+# TrainRecord = namedtuple('TrainRecord',['episode', 'reward'])
 
 class Actor(nn.Module):
-    def __init__(self):
+    def __init__(self,num_state, num_action):
         super(Actor, self).__init__()
         self.fc1 = nn.Linear(num_state, 64)
         self.fc2 = nn.Linear(64,8)
-        self.mu_head = nn.Linear(8, 1)
-        self.sigma_head = nn.Linear(8, 1)
+        self.mu_head = nn.Linear(8, num_action)
+        self.sigma_head = nn.Linear(8, num_action)
 
     def forward(self, x):
         x = F.leaky_relu(self.fc1(x))
@@ -57,7 +57,7 @@ class Actor(nn.Module):
         return mu, sigma
 
 class Critic(nn.Module):
-    def __init__(self):
+    def __init__(self,num_state):
         super(Critic, self).__init__()
         self.fc1 = nn.Linear(num_state, 64)
         self.fc2 = nn.Linear(64, 8)
@@ -77,7 +77,7 @@ class PPO:
     batch_size = 32
 
     def __init__(self, num_state, num_action):
-        self.actor_net = Actor(num_state).float()
+        self.actor_net = Actor(num_state, num_action).float()
         self.critic_net = Critic(num_state).float()
         self.buffer = []
         self.counter = 0

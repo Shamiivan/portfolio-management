@@ -193,3 +193,36 @@ Notes:
 2024-09-30 19:53:17,706 - custom_utils - INFO - Maximum Drawdown: 0.0
 2024-09-30 19:53:17,727 - custom_utils - INFO - Long Portfolio Turnover nan
 2024-09-30 19:53:17,739 - custom_utils - INFO - Short Portfolio Turnover : nan
+2024-10-01 08:23:34,048 - custom_utils - INFO - Sharpe Ratio 9120.588485298627
+2024-10-01 08:23:34,067 - custom_utils - INFO -                             OLS Regression Results                            
+==============================================================================
+Dep. Variable:                port_11   R-squared:                       0.001
+Model:                            OLS   Adj. R-squared:                 -0.005
+Method:                 Least Squares   F-statistic:                    0.1214
+Date:                Tue, 01 Oct 2024   Prob (F-statistic):              0.728
+Time:                        08:23:34   Log-Likelihood:                 894.13
+No. Observations:                 168   AIC:                            -1784.
+Df Residuals:                     166   BIC:                            -1778.
+Df Model:                           1                                         
+Covariance Type:                  HAC                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      3.1208      0.000    2.5e+04      0.000       3.121       3.121
+sp_ret         0.0008      0.002      0.348      0.728      -0.004       0.005
+==============================================================================
+Omnibus:                        3.694   Durbin-Watson:                   1.534
+Prob(Omnibus):                  0.158   Jarque-Bera (JB):                3.733
+Skew:                           0.355   Prob(JB):                        0.155
+Kurtosis:                       2.833   Cond. No.                         23.4
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 3 lags and without small sample correction
+2024-10-01 08:23:34,074 - custom_utils - INFO - CAPM Alpha: 3.120846244148164
+2024-10-01 08:23:34,074 - custom_utils - INFO - t-statistic: 25020.68399469798
+2024-10-01 08:23:34,074 - custom_utils - INFO - Information Ratio :9096.999500570326
+2024-10-01 08:23:34,074 - custom_utils - INFO - Max 1-Month Loss: 3.1185241851535337
+2024-10-01 08:23:34,076 - custom_utils - INFO - Maximum Drawdown: 0.0
+2024-10-01 08:23:34,097 - custom_utils - INFO - Long Portfolio Turnover nan
+2024-10-01 08:23:34,109 - custom_utils - INFO - Short Portfolio Turnover : nan
